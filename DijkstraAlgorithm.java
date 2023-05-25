@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class DijkstraAlgorithm {
-    public int distance[];
+    public int[] distance;
     public Set<Integer> settled;
     public PriorityQueue<Node> pq;
     public int numVertices;
@@ -14,22 +14,8 @@ public class DijkstraAlgorithm {
         pq = new PriorityQueue<>(numVertices, new Node());
     }
 
-    private List<List<Node>> graphToList(int[][] graph) {
-        List<List<Node>> adjacencylist = new ArrayList<>();
-        for(int i = 0; i < graph.length; i++) {
-            adjacencylist.add(new ArrayList<>());
-            for (int j = 0; j <graph.length; j++ ) {
-                if(graph[i][j] < Integer.MAX_VALUE) {
-                    adjacencylist.get(i).add(new Node(j, graph[i][j]));
-                }
-
-            }
-        }
-        return adjacencylist;
-    }
-
-    public void dijkstra(int[][] graph, int sourceVertex) {
-        this.adjacencylist = graphToList(graph);
+    public void dijkstra(List<List<Node>> graph, int sourceVertex) {
+        this.adjacencylist = graph;
 
         for (int i = 0; i < numVertices; i++) {
             distance[i] = Integer.MAX_VALUE;
@@ -54,10 +40,11 @@ public class DijkstraAlgorithm {
                 if (newDistance < distance[neighbor.node]) {
                     distance[neighbor.node] = newDistance;
 
-                    Collection collection = pq.stream()
-                            .filter(node -> node.node == neighbor.node).toList();
+                    var existed = pq.stream()
+                            .filter(node -> node.node == neighbor.node)
+                            .findFirst();
 
-                    pq.remove(collection);
+                    existed.ifPresent(node -> pq.remove(node));
 
                     pq.add(new Node(neighbor.node, distance[neighbor.node]));
                 }

@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class SequenceAlgorithm {
     static final int INF = Integer.MAX_VALUE;
     static int sizeMatrix = 15000;
@@ -6,12 +9,14 @@ public class SequenceAlgorithm {
         int numVertices = sizeMatrix;
         int sourceVertex = 0;
 
-        int[][] graph = new int[sizeMatrix][sizeMatrix];
-
+        List<List<Node>> adjacencylist = new ArrayList<>();
         for(int i = 0; i < sizeMatrix; i++) {
-            for(int j = 0; j < sizeMatrix; j++) {
-                graph[i][j] = j;
-
+            adjacencylist.add(new ArrayList<>());
+            for (int j = 0; j <sizeMatrix; j++ ) {
+                double rand = Math.random();
+                if(rand <0.5) {
+                    adjacencylist.get(i).add(new Node(j, j));
+                }
 
             }
         }
@@ -19,8 +24,7 @@ public class SequenceAlgorithm {
 
         DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(numVertices);
 
-
-        dijkstraAlgorithm.dijkstra(graph, sourceVertex);
+        dijkstraAlgorithm.dijkstra(adjacencylist, sourceVertex);
 
         double endTime = System.currentTimeMillis();
 
