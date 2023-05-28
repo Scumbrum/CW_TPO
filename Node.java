@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.Comparator;
 
-class Node implements Comparator<Node> {
+class Node implements Comparator<Node>, Serializable {
     public int node;
     public int cost;
 

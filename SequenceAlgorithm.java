@@ -1,37 +1,47 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 public class SequenceAlgorithm {
-    static final int INF = Integer.MAX_VALUE;
-    static int sizeMatrix = 15000;
+    static int countVertex = 1_000;
+    static int countEdge = 800_000;
+
+    static int averowEdge;
+    static int extraEdge;
 
     public static void main(String[] args) {
-        int numVertices = sizeMatrix;
-        int sourceVertex = 0;
 
-        List<List<Node>> adjacencylist = new ArrayList<>();
-        for(int i = 0; i < sizeMatrix; i++) {
-            adjacencylist.add(new ArrayList<>());
-            for (int j = 0; j <sizeMatrix; j++ ) {
+        averowEdge = countEdge / countVertex;
+        extraEdge = countEdge % countVertex;
+
+        int[][] graph = new int[countVertex][];
+
+        for (int i = 0; i < countVertex; i++) {
+            int edgeCount = (i < extraEdge) ? averowEdge + 1 : averowEdge;
+            graph[i] = new int[countVertex];
+            for (int j = 0; j < edgeCount; j++) {
                 double rand = Math.random();
-                if(rand <0.5) {
-                    adjacencylist.get(i).add(new Node(j, j));
-                }
-
+                int dist = (int) (rand * 25);
+                int node = (int) (rand * countVertex);
+                graph[i][node] = dist;
             }
         }
+
+        DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(countVertex);
+
         double startTime = System.currentTimeMillis();
 
-        DijkstraAlgorithm dijkstraAlgorithm = new DijkstraAlgorithm(numVertices);
-
-        dijkstraAlgorithm.dijkstra(adjacencylist, sourceVertex);
+        dijkstraAlgorithm.dijkstra(graph, 0);
 
         double endTime = System.currentTimeMillis();
 
         System.out.println("Time: " + (endTime - startTime));
 
-//        System.out.println("The shortest path to all vertices from the source vertex " + sourceVertex + " is: ");
-//        for (int i = 0; i < numVertices; i++) {
+//        System.out.println("Matrix: ");
+//        for(int i = 0; i <graph.length; i++) {
+//            System.out.println(Arrays.toString(graph[i]));
+//        }
+//
+//        System.out.println("The shortest path to all vertices from the source vertex " + countVertex + " is: ");
+//        for (int i = 0; i < countVertex; i++) {
 //            System.out.println("Vertex " + i + ": " + dijkstraAlgorithm.distance[i]);
 //        }
     }
